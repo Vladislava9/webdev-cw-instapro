@@ -57,7 +57,7 @@ export function renderPostsPageComponent({ appEl, posts, token }) {
   </div>`;
   appEl.innerHTML = appPostsHtml;
   
-  console.log("Актуальный список постов:", posts);
+
  
   /**
    * TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
@@ -80,21 +80,16 @@ export function renderPostsPageComponent({ appEl, posts, token }) {
   likeButtonElements.forEach((likeButtonElement, index) => {
     likeButtonElement.addEventListener("click", (event) => {
       const post = posts[index];
-      console.log(post);
       let { id } = post;
-      console.log(id);
       let { isLiked } = post;
-      console.log(isLiked);
       if (isLiked) {
         dislike({ token, id }).then((responseData) => {
-          console.log(responseData.post.likes);
           posts[index].likes = responseData.post.likes;
           posts[index].isLiked = responseData.post.isLiked;
           renderPostsPageComponent({ appEl, posts, token });
         });
       } else {
         postLike({ token, id }).then((responseData) => {
-          console.log(responseData.post.likes);
           posts[index].likes = responseData.post.likes;
           posts[index].isLiked = responseData.post.isLiked;
           renderPostsPageComponent({ appEl, posts, token });

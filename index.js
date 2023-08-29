@@ -78,8 +78,6 @@ export const goToPage = (newPage, data) => {
           }
         });
         page = USER_POSTS_PAGE;
-        console.log(page);
-        console.log(posts);
         return renderApp();
       }, 600);
     }
