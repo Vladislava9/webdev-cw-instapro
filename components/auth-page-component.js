@@ -1,5 +1,6 @@
 import { loginUser, registerUser } from "../api.js";
 import { renderHeaderComponent } from "./header-component.js";
+import { replaceAllFunction } from "./replace-all.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
 
 export function renderAuthPageComponent({ appEl, setUser }) {
@@ -104,9 +105,9 @@ export function renderAuthPageComponent({ appEl, setUser }) {
             setError(error.message);
           });
       } else {
-        const login = document.getElementById("login-input").value;
-        const name = document.getElementById("name-input").value;
-        const password = document.getElementById("password-input").value;
+        const login = replaceAllFunction(document.getElementById("login-input").value);
+        const name = replaceAllFunction(document.getElementById("name-input").value);
+        const password = replaceAllFunction(document.getElementById("password-input").value);
         if (!name) {
           alert("Введите имя");
           return;

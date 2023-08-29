@@ -2,55 +2,58 @@ import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { goToPage } from "../index.js";
 import { dislike, postLike } from "../api.js";
+import { renderPostsPageComponent } from "./posts-page-component.js";
 import { formatDistanceToNow } from "date-fns";
 import { ru } from "date-fns/locale";
 
+export function renderPostsUserPageComponent({ appEl, posts, token }) {
+    const userPost = posts[0];
+    const {user}= userPost;
 
-export function renderPostsPageComponent({ appEl, posts, token }) {
-  
-  const appHtml = posts.map((post) => {
+    const appHtml = posts
+  .map((post) => {
     const likesLength = post.likes.length;
     const createDate = formatDistanceToNow(new Date(post.createdAt), {locale: ru});
-    return `<li class="post">
-<div class="post-header" data-user-id="${post.user.id}">
-    <img class="post-header__user-image" src="${post.user.imageUrl}">
-    <p class="post-header__user-name">${post.user.name}</p>
-</div>
-<div class="post-image-container">
-  <img class="post-image" src="${post.imageUrl}">
-</div>
-<div class="post-likes">
-  <button data-post-id="${post.id}" class="like-button">
-    <img src="${
-      post.isLiked
-        ? "./assets/images/like-active.svg"
-        : "./assets/images/like-not-active.svg"
-    }">
-  </button>
-  <p class="post-likes-text">
-    Нравится: <strong>${
-      likesLength === 0
-        ? 0
-        : `${post.likes.at(-1).name}${
-            likesLength > 1 ? ` и еще ${likesLength - 1}` : ""
-          }`
-    }</strong>
-  </p>
-</div>
-<p class="post-text">
-  <span class="user-name">${post.user.name}</span>
-  ${post.description}
-</p>
-<p class="post-date">
-  ${createDate + ` назад`}
-</p>
-</li>`;
+    return `<li class="post"> 
+    <div class="post-image-container">
+      <img class="post-image" src="${post.imageUrl}">
+    </div>
+    <div class="post-likes">
+      <button data-post-id="${post.id}" class="like-button">
+        <img src="${
+          post.isLiked
+            ? "./assets/images/like-active.svg"
+            : "./assets/images/like-not-active.svg"
+        }">
+      </button>
+      <p class="post-likes-text">
+        Нравится: <strong>${
+          likesLength === 0
+            ? 0
+            : `${post.likes.at(-1).name}${
+                likesLength > 1 ? ` и еще ${likesLength - 1}` : ""
+              }`
+        }</strong>
+      </p>
+    </div>
+    <p class="post-text">
+        <span class="user-name">${post.user.name}</span>
+        ${post.description}
+    </p>
+    <p class="post-date">
+    ${createDate + `назад`}
+    </p>
+    `;
   })
   .join("");
   
   const appPostsHtml = `
   <div class="page-container">
     <div class="header-container"></div>
+    <div class="posts-user-header">
+        <img src="${user.imageUrl}" class="posts-user-header__user-image">
+            <p class="posts-user-header__user-name">${user.name}</p>
+    </div>
     <ul class="posts">
     ${appHtml}
     </ul>
