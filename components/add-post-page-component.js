@@ -33,9 +33,9 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     appEl.innerHTML = appHtml;
 
     document.getElementById("add-button").addEventListener("click", () => {
-      const postDescription = replaceAllFunction(document.getElementById("input-id"));
+      const postDescription = replaceAllFunction(document.getElementById("input-id").value);
       onAddPostClick({
-        description: postDescription.value,
+        description: postDescription,
         imageUrl: imageUrl,
       });
     });
