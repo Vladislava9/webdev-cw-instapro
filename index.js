@@ -1,6 +1,7 @@
-import { getPosts } from "./api.js";
+import { addPosts, getPosts } from "./api.js";
 import { renderAddPostPageComponent } from "./components/add-post-page-component.js";
 import { renderAuthPageComponent } from "./components/auth-page-component.js";
+import { renderPostsUserPageComponent } from "./components/user-post-component.js";
 import {
   ADD_POSTS_PAGE,
   AUTH_PAGE,
@@ -68,15 +69,21 @@ export const goToPage = (newPage, data) => {
 
     if (newPage === USER_POSTS_PAGE) {
       // TODO: реализовать получение постов юзера из API
-      console.log("Открываю страницу пользователя: ", data.userId);
-      page = USER_POSTS_PAGE;
-      posts = [];
-      return renderApp();
+      page = LOADING_PAGE;
+      renderApp();
+      return setTimeout(() => {
+        posts = posts.filter((post) => {
+          if(post.user.id === data.userId){
+            return post;
+          }
+        });
+        page = USER_POSTS_PAGE;
+        return renderApp();
+      }, 600);
     }
-
+    // console.log("Открываю страницу пользователя: ", data.userId);
     page = newPage;
     renderApp();
-
     return;
   }
 
@@ -110,8 +117,8 @@ const renderApp = () => {
     return renderAddPostPageComponent({
       appEl,
       onAddPostClick({ description, imageUrl }) {
-        // TODO: реализовать добавление поста в API
         console.log("Добавляю пост...", { description, imageUrl });
+        addPosts({token: getToken(), description, imageUrl})
         goToPage(POSTS_PAGE);
       },
     });
@@ -120,14 +127,17 @@ const renderApp = () => {
   if (page === POSTS_PAGE) {
     return renderPostsPageComponent({
       appEl,
+      posts,
+      token: getToken(),
     });
   }
 
   if (page === USER_POSTS_PAGE) {
     // TODO: реализовать страницу фотографию пользвателя
-    appEl.innerHTML = "Здесь будет страница фотографий пользователя";
-    return;
+    return renderPostsUserPageComponent({ appEl, posts, token: getToken()})
   }
 };
 
 goToPage(POSTS_PAGE);
+
+// 9kc0asb4as5k5c5c5c6g9kc0asb4as6g9kc0asb4as
